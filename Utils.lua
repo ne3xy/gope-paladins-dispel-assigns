@@ -1,13 +1,13 @@
 local addonName, addon = ...
 
-local function addon:IsDispellableAura(aura)
+function addon:IsDispellableAura(aura)
     if aura and aura.isHarmful == true and aura.dispelName ~= nil then
         return aura.auraInstanceID
     end
     return nil
 end
 
-local function addon:HasDispellableAura(unit) 
+function addon:HasDispellableAura(unit) 
     local auras = C_UnitAuras.GetUnitAuras(unit, "HARMFUL")
     if not auras then return nil end
 
