@@ -73,10 +73,10 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
     -- 3. removals → re-check this unit only
     if updateInfo.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
-            if auraInstanceId ~= nil then
+            if auraInstanceID ~= nil then
                 local dispelIndex = instanceIdToDispel[auraInstanceID]
                 if dispelIndex and addon.dispels[dispelIndex] then
-                    addon.dispels[dispelIndex][dispelled] = true
+                    addon.dispels[dispelIndex].dispelled = true
                     instanceIdToDispel[auraInstanceID] = nil
                     changed = true
                 end
