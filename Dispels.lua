@@ -6,6 +6,7 @@ local instanceIdToDispel = {}
 
 function addon:InitDispellers()
     addon.dispellers = {}
+    addon.dispels = {}
 
     for i = 1, GetNumGroupMembers() do
         local unit = (IsInRaid() and "raid"..i) or "party"..i
@@ -32,16 +33,16 @@ function addon:InitDispellers()
 end
 
 
-function addon:HandleAuraUpdate(unit, updateInfo)
-    if not UnitInRaid(unit) then return end
+function addon:HandleAuraUpdate(unitToken, updateInfo)
+    local raidIndex = UnitInRaid(unitToken)
+    if not raidIndex then return end
+    local unit = "raid" .. raidIndex
     local changed = false
 
     -- full resync (rare but important)
     if updateInfo.isFullUpdate then
         local instanceId = addon:HasDispellableAura(unit)
         if instanceId and not instanceIdToDispel[instanceId] then
-            print("Found dispellable aura with instance ID:", aura.auraInstanceID)
-            print("Found dispellable aura  with Name:", aura.name)
             table.insert(addon.dispels, {
                 unit = unit,
                 auraInstanceID = instanceId,
@@ -57,8 +58,6 @@ function addon:HandleAuraUpdate(unit, updateInfo)
         for _, aura in ipairs(updateInfo.addedAuras) do
             if addon:IsDispellableAura(aura, unit) then
                 if not instanceIdToDispel[aura.auraInstanceID] then
-                    print("Added dispellable aura with instance ID:", aura.auraInstanceID)
-                    print("Added dispellable aura  with Name:", aura.name)
                     table.insert(addon.dispels, {
                         unit = unit,
                         auraInstanceID = aura.auraInstanceID,
@@ -71,29 +70,10 @@ function addon:HandleAuraUpdate(unit, updateInfo)
         end
     end
 
-    -- 2. updated auras (need lookup) -------should be NOOP
-    -- if updateInfo.updatedAuraInstanceIDs then
-    --     for _, auraInstanceID in ipairs(updateInfo.updatedAuraInstanceIDs) do
-    --         local aura = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
-    --         if addon:IsDispellableAura(aura) then
-    --             addon.dispels[unit] = true
-    --             return
-    --         end
-    --     end
-    -- end
-
     -- 3. removals → re-check this unit only
     if updateInfo.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
-            -- if (instanceIdToDispel[auraInstanceID]) then
-                -- print("Found matching dispel for removed aura instance ID:", auraInstanceID)
-                -- print(instanceIdToDispel[auraInstanceID])
-                -- print(addon.dispels[instanceIdToDispel[auraInstanceID]])
-                -- print("Removed dispellable aura with instance ID:", auraInstanceID)
-            -- end
-            if auraInstanceId == nil then
-                -- print("Warning: removed aura instance ID is nil for unit", unit)
-            else
+            if auraInstanceId ~= nil then
                 local dispelIndex = instanceIdToDispel[auraInstanceID]
                 if dispelIndex and addon.dispels[dispelIndex] then
                     addon.dispels[dispelIndex][dispelled] = true

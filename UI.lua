@@ -47,18 +47,17 @@ function addon:RenderUI()
         -- find assignment(s)
         local assignedTargets = {}
 
+        print("num dispels:", #addon.dispels)
         for dispelIndex, dispelInfo in pairs(addon.dispels or {}) do
             local assignedDispellerIndex = ((dispelIndex - 1) % #addon.dispellers) + 1
             local assignedDispeller = addon.dispellers[assignedDispellerIndex]
 
             if assignedDispeller == dispellerUnit then
-                table.insert(assignedTargets, target)
+                table.insert(assignedTargets, addon.dispels[dispelIndex].unit)
             end
         end
 
-        local assignmentText = #assignedTargets > 0
-            and table.concat(assignedTargets, ", ")
-            or "—"
+        local assignmentText = #assignedTargets > 0 and table.concat(assignedTargets, ", ") or "—"
 
         text:SetText(dispellerName .. " → " .. assignmentText)
 
