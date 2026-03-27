@@ -54,13 +54,13 @@ function addon:RenderUI()
             local assignedDispeller = addon.dispellers[assignedDispellerIndex]
 
             if assignedDispeller == dispellerUnit then
-            table.insert(assignedTargets, addon.dispels[dispelIndex].unit)
+            table.insert(assignedTargets, addon.dispels[dispelIndex].unit ..":"  .. addon.dispels[dispelIndex].auraInstanceID .. (addon.dispels[dispelIndex].dispelled and " (dispelled)" or "()"))
             end
         end
 
         local assignmentText = #assignedTargets > 0 and table.concat(assignedTargets, ", ") or "—"
 
-        text:SetText(dispellerName .. " → " .. assignmentText)
+        text:SetText(dispellerName .. ": " .. assignmentText)
 
         table.insert(frame.rows, row)
 
