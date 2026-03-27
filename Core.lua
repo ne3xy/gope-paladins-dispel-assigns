@@ -17,10 +17,8 @@ addon.frame:SetScript("OnEvent", function(_, event, ...)
         end
 
     elseif event == "ENCOUNTER_END" then
-        if encounterID == TARGET_ENCOUNTER_ID then
-            active = false
-            addon:HideUI()
-        end
+        active = false
+        addon:HideUI()
 
     elseif event == "UNIT_AURA" and active then
         local changed = addon:HandleAuraUpdate(...)
