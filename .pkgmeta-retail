@@ -1,6 +1,6 @@
 package-as: gope-paladins-dispels
 
 externals:
-  libs/LibGetFrame-1.0: https://github.com/mrbuds/LibGetFrame
+  Libs/LibGetFrame-1.0: https://github.com/mrbuds/LibGetFrame
   Libs/LibCustomGlow-1.0: https://github.com/Stanzilla/LibCustomGlow
   Libs/LibStub: https://repos.curseforge.com/wow/libstub/trunk
