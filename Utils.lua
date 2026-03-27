@@ -1,10 +1,8 @@
 local addonName, addon = ...
 
-function addon:IsDispellableAura(aura)
+function addon:IsDispellableAura(aura, unit)
     if aura and aura.dispelName then
-        print("DispelType", aura.dispelName)
-        print("name", aura.name)
-        return aura.auraInstanceID
+        return addon:HasDispellableAura(unit)
     end
     return nil
 end

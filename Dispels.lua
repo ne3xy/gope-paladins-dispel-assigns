@@ -53,7 +53,7 @@ function addon:HandleAuraUpdate(unit, updateInfo)
     -- 1. added auras (already have full data)
     if updateInfo.addedAuras then
         for _, aura in ipairs(updateInfo.addedAuras) do
-            if addon:IsDispellableAura(aura) then
+            if addon:IsDispellableAura(aura, unit) then
                 print("Added dispellable aura with instance ID:", aura.auraInstanceID)
                  table.insert(addon.dispels, {
                     unit = unit,
