@@ -1,0 +1,10 @@
+## Interface: 120000, 120001
+## Title: Gope Paladins Dispels
+## Notes: Assigns dispels for Lightblinded Vanguards
+## Author: Nexy
+## Version: 0.1
+
+Utils.lua
+Dispels.lua
+UI.lua
+Core.lua
