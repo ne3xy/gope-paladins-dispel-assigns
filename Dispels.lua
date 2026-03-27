@@ -83,6 +83,11 @@ function addon:HandleAuraUpdate(unit, updateInfo)
         for asdf, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
             print("Removed dispellable aura with instance ID:", auraInstanceID)
             print("Removed dispellable aura  with asf:", asdf)
+            if (instanceIdToDispel[auraInstanceID]) then
+                print("Found matching dispel for removed aura instance ID:", auraInstanceID)
+            else
+                print("No matching dispel found for removed aura instance ID:", auraInstanceID)
+            end
             local dispelIndex = instanceIdToDispel[auraInstanceID]
             if dispelIndex and addon.dispels[dispelIndex] then
                 addon.dispels[dispelIndex][dispelled] = true
