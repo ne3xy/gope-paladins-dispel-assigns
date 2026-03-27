@@ -19,11 +19,13 @@ addon.frame:SetScript("OnEvent", function(_, event, ...)
     elseif event == "ENCOUNTER_END" then
         active = false
         addon:HideUI()
+        addon:StopAllGlows()
 
     elseif event == "UNIT_AURA" and active then
         local changed = addon:HandleAuraUpdate(...)
         if changed then
             addon:RenderUI()
+            addon:UpdateGlows()
         end
     end
 end)

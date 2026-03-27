@@ -1,4 +1,6 @@
 local addonName, addon = ...
+local LGF = LibStub("LibGetFrame-1.0")
+local LCG = LibStub("LibCustomGlow-1.0")
 
 addon.ui = CreateFrame("Frame", "GopePaladinDispelDebugFrame", UIParent, "BackdropTemplate")
 addon.ui:SetSize(300, 400)
@@ -47,7 +49,6 @@ function addon:RenderUI()
         -- find assignment(s)
         local assignedTargets = {}
 
-        print("num dispels:", #addon.dispels)
         for dispelIndex, dispelInfo in pairs(addon.dispels or {}) do
             local assignedDispellerIndex = ((dispelIndex - 1) % #addon.dispellers) + 1
             local assignedDispeller = addon.dispellers[assignedDispellerIndex]
@@ -71,4 +72,36 @@ end
 
 function addon:HideUI()
     addon.ui:Hide()
+end
+
+local glowedFrames = {}
+function addon:UpdateGlows()
+    if (addon.myIndex == nil) then return end
+    local numDispellers = #addon.dispellers or 1
+    local found = false
+    local n = addon.myIndex
+    while (n <= #addon.dispels and not found) do
+        local dispelInfo = addon.dispels[n]
+        if dispelInfo then
+            local frame = LGF:GetFrame(dispelInfo.unit)
+            if not frame then print("Frame not found for unit: " .. dispelInfo.unit); return end
+            if dispelInfo.dispelled then
+                LCG.ButtonGlow_Stop(frame)
+                glowedFrames[frame] = nil
+            else            
+                glowedFrames[frame] = true
+                LCG.ButtonGlow_Start(frame)
+                found = true
+                break
+            end
+        end
+        n = n + numDispellers
+    end
+end
+
+function addon:StopAllGlows()
+    for frame, _ in pairs(glowedFrames) do
+        LCG.ButtonGlow_Stop(frame)
+    end
+    glowedFrames = {}
 end

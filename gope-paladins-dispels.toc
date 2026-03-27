@@ -4,6 +4,10 @@
 ## Author: Nexy
 ## Version: 0.1
 
+libs\LibStub\LibStub.lua
+libs\LibGetFrame-1.0\LibGetFrame-1.0.lua
+libs\LibCustomGlow-1.0\LibCustomGlow.lua
+
 Utils.lua
 Dispels.lua
 UI.lua

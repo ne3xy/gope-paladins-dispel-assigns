@@ -2,6 +2,7 @@ local addonName, addon = ...
 
 addon.dispellers = {}
 addon.dispels = {}
+addon.myIndex = nil
 local instanceIdToDispel = {}
 
 function addon:InitDispellers()
@@ -17,6 +18,9 @@ function addon:InitDispellers()
 
             if role == "HEALER" then
                 table.insert(addon.dispellers, unit)
+                if UnitIsUnit(unit, "player") then
+                    addon.myIndex = #addon.dispellers
+                end
             end
 
             if class == "WARLOCK" then
@@ -25,6 +29,9 @@ function addon:InitDispellers()
                     local _, specName = GetSpecializationInfoByID(spec)
                     if specName == "Affliction" or specName == "Destruction" then
                         table.insert(addon.dispellers, unit)
+                        if UnitIsUnit(unit, "player") then
+                            addon.myIndex = #addon.dispellers
+                        end
                     end
                 end
             end
