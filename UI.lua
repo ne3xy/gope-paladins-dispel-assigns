@@ -83,7 +83,7 @@ function addon:UpdateGlows()
     while (n <= #addon.dispels and not found) do
         local dispelInfo = addon.dispels[n]
         if dispelInfo then
-            local frame = LGF:GetFrame(dispelInfo.unit)
+            local frame = LGF.GetUnitFrame(dispelInfo.unit)
             if not frame then print("Frame not found for unit: " .. dispelInfo.unit); return end
             if dispelInfo.dispelled then
                 LCG.ButtonGlow_Stop(frame)
