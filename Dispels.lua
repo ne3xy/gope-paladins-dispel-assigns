@@ -32,7 +32,7 @@ function addon:InitDispellers()
 end
 
 
-local function addon:HandleAuraUpdate(unit, updateInfo)
+function addon:HandleAuraUpdate(unit, updateInfo)
     if not UnitInRaid(unit) then return end
     local changed = false
 
