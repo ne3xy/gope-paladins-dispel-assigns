@@ -1,4 +1,4 @@
-package-as: Gope Paladins Dispels
+package-as: gope-paladins-dispels
 
 externals:
   libs/LibGetFrame-1.0: https://github.com/mrbuds/LibGetFrame
