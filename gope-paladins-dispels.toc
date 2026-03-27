@@ -4,9 +4,9 @@
 ## Author: Nexy
 ## Version: 0.1
 
-libs\LibStub\LibStub.lua
-libs\LibGetFrame-1.0\LibGetFrame-1.0.lua
-libs\LibCustomGlow-1.0\LibCustomGlow.lua
+Libs\LibStub\LibStub.lua
+Libs\LibGetFrame-1.0\LibGetFrame-1.0.lua
+Libs\LibCustomGlow-1.0\LibCustomGlow-1.0.lua
 
 Utils.lua
 Dispels.lua
