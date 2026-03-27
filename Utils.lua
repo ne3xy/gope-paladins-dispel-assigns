@@ -1,7 +1,7 @@
 local addonName, addon = ...
 
 function addon:IsDispellableAura(aura)
-    if aura and aura.isHarmful == true and aura.dispelName ~= nil then
+    if aura and aura.dispelName ~= nil then
         return aura.auraInstanceID
     end
     return nil
