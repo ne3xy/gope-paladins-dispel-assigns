@@ -62,6 +62,7 @@ function addon:HandleAuraUpdate(unit, updateInfo)
                     dispelled = false
                 })
                 instanceIdToDispel[aura.auraInstanceID] = #addon.dispels
+                print(#addon.dispels)
                 changed = true
             end
         end
@@ -84,6 +85,7 @@ function addon:HandleAuraUpdate(unit, updateInfo)
             if (instanceIdToDispel[auraInstanceID]) then
                 print("Found matching dispel for removed aura instance ID:", auraInstanceID)
                 print(instanceIdToDispel[auraInstanceID])
+                print(addon.dispels[instanceIdToDispel[auraInstanceID]])
                 print("Removed dispellable aura with instance ID:", auraInstanceID)
                 print("Removed dispellable aura  with asf:", asdf)
             end
