@@ -55,6 +55,7 @@ function addon:HandleAuraUpdate(unit, updateInfo)
         for _, aura in ipairs(updateInfo.addedAuras) do
             if addon:IsDispellableAura(aura, unit) then
                 print("Added dispellable aura with instance ID:", aura.auraInstanceID)
+                print("Added dispellable aura  with Name:", aura.name)
                  table.insert(addon.dispels, {
                     unit = unit,
                     auraInstanceID = aura.auraInstanceID,
@@ -80,6 +81,8 @@ function addon:HandleAuraUpdate(unit, updateInfo)
     -- 3. removals → re-check this unit only
     if updateInfo.removedAuraInstanceIDs then
         for asdf, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
+            print("Removed dispellable aura with instance ID:", auraInstanceID)
+            print("Removed dispellable aura  with asf:", asdf)
             local dispelIndex = instanceIdToDispel[auraInstanceID]
             if dispelIndex and addon.dispels[dispelIndex] then
                 addon.dispels[dispelIndex][dispelled] = true
