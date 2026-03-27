@@ -84,19 +84,22 @@ function addon:HandleAuraUpdate(unit, updateInfo)
 
     -- 3. removals → re-check this unit only
     if updateInfo.removedAuraInstanceIDs then
-        for asdf, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
+        for _, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
             -- if (instanceIdToDispel[auraInstanceID]) then
                 -- print("Found matching dispel for removed aura instance ID:", auraInstanceID)
                 -- print(instanceIdToDispel[auraInstanceID])
                 -- print(addon.dispels[instanceIdToDispel[auraInstanceID]])
                 -- print("Removed dispellable aura with instance ID:", auraInstanceID)
-                -- print("Removed dispellable aura  with asf:", asdf)
             -- end
-            local dispelIndex = instanceIdToDispel[auraInstanceID]
-            if dispelIndex and addon.dispels[dispelIndex] then
-                addon.dispels[dispelIndex][dispelled] = true
-                instanceIdToDispel[auraInstanceID] = nil
-                changed = true
+            if auraInstanceId == nil then
+                print("Warning: removed aura instance ID is nil for unit", unit)
+            else
+                local dispelIndex = instanceIdToDispel[auraInstanceID]
+                if dispelIndex and addon.dispels[dispelIndex] then
+                    addon.dispels[dispelIndex][dispelled] = true
+                    instanceIdToDispel[auraInstanceID] = nil
+                    changed = true
+                end
             end
         end
     end

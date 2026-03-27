@@ -52,7 +52,7 @@ function addon:RenderUI()
             local assignedDispeller = addon.dispellers[assignedDispellerIndex]
 
             if assignedDispeller == dispellerUnit then
-                table.insert(assignedTargets, UnitName(target))
+                table.insert(assignedTargets, target)
             end
         end
 
