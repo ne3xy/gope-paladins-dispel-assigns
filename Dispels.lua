@@ -92,7 +92,7 @@ function addon:HandleAuraUpdate(unit, updateInfo)
                 -- print("Removed dispellable aura with instance ID:", auraInstanceID)
             -- end
             if auraInstanceId == nil then
-                print("Warning: removed aura instance ID is nil for unit", unit)
+                -- print("Warning: removed aura instance ID is nil for unit", unit)
             else
                 local dispelIndex = instanceIdToDispel[auraInstanceID]
                 if dispelIndex and addon.dispels[dispelIndex] then
