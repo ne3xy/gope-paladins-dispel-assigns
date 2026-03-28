@@ -2,7 +2,7 @@
 ## Title: Gope Paladins Dispels
 ## Notes: Assigns dispels for Lightblinded Vanguards
 ## Author: Nexy
-## Version: 0.1
+## Version: 1.0
 ## OptionalDeps: Masque, LibCustomGlow-1.0
 
 Libs\LibStub\LibStub.lua

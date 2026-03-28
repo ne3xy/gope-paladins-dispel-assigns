@@ -13,7 +13,7 @@ function addon:HasDispellableAura(unit)
 
     for _, aura in ipairs(auras) do
         if aura.dispelName then
-            print("Found " .. unit .. " IID: " .. aura.auraInstanceID .. " - " .. (aura.name or "unknown"))
+            -- print("Found " .. unit .. " IID: " .. aura.auraInstanceID .. " - " .. (aura.name or "unknown"))
             return addon:InstanceIdForUnit(unit, aura.auraInstanceID)
         end
     end

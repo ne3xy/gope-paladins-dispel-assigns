@@ -3,7 +3,26 @@ local addonName, addon = ...
 addon.dispellers = {}
 addon.dispels = {}
 addon.myIndex = nil
-local instanceIdToDispel = {}
+addon.dispelStatus = {}
+local pendingDispels = {}
+
+local function scheduleTimer()
+    C_Timer.After(0.01, function()
+            addon:processPending()
+        end)
+end
+
+function addon:processPending()
+    local sorted = {}
+    for id, info in pairs(pendingDispels) do
+        table.insert(sorted, info)
+    end
+    table.sort(sorted, function(a,b) return a.unit < b.unit end)
+    for _, info in ipairs(sorted) do
+        table.insert(addon.dispels, info)
+    end
+    pendingDispels = {}
+end
 
 function addon:InitDispellers()
     addon.dispellers = {}
@@ -49,14 +68,14 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
 
     if updateInfo.isFullUpdate then
         local instanceId = addon:HasDispellableAura(unit)
-        if instanceId and not instanceIdToDispel[instanceId] then
-            print("Adding dispel by full update for unit " .. unit .. " with instance ID " .. instanceId)
-            table.insert(addon.dispels, {
+        if instanceId and addon.dispelStatus[instanceId] == nil then
+            -- print("Adding dispel by full update for unit " .. unit .. " with instance ID " .. instanceId)
+            pendingDispels[instanceId] = {
                 unit = unit,
-                auraInstanceID = instanceId,
-                dispelled = false
-            })
-            instanceIdToDispel[instanceId] = #addon.dispels
+                auraInstanceID = instanceId
+            }
+            addon.dispelStatus[instanceId] = false
+            scheduleTimer()
             changed = true
         end
     end
@@ -65,14 +84,14 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
         for _, aura in ipairs(updateInfo.addedAuras) do
             local instanceId = addon:IsPlusHasDispellableAura(aura, unit)
             if instanceId then
-                if not instanceIdToDispel[instanceId] then
-                    print("Adding dispel by added aura for unit " .. unit .. " with instance ID " .. instanceId)
-                    table.insert(addon.dispels, {
+                if addon.dispelStatus[instanceId] == nil then
+                    -- print("Adding dispel by added aura for unit " .. unit .. " with instance ID " .. instanceId)
+                    pendingDispels[instanceId] = {
                         unit = unit,
-                        auraInstanceID = instanceId,
-                        dispelled = false
-                    })
-                    instanceIdToDispel[instanceId] = #addon.dispels
+                        auraInstanceID = instanceId
+                    }
+                    addon.dispelStatus[instanceId] = false
+                    scheduleTimer()
                 end
                 changed = true
             end
@@ -85,11 +104,9 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
         for _, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
             if auraInstanceID ~= nil then
                 local instanceId = addon:InstanceIdForUnit(unit, auraInstanceID)
-                local dispelIndex = instanceIdToDispel[instanceId]
-                if dispelIndex and addon.dispels[dispelIndex] then
-                    print("Marking dispel as dispelled for unit " .. unit .. " with instance ID " .. instanceId)
-                    addon.dispels[dispelIndex].dispelled = true
-                    instanceIdToDispel[instanceId] = nil
+                if addon.dispelStatus[instanceId] == false then
+                    -- print("Marking dispel as dispelled for unit " .. unit .. " with instance ID " .. instanceId)
+                    addon.dispelStatus[instanceId] = true
                     changed = true
                 end
             end
