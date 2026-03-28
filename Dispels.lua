@@ -43,10 +43,10 @@ end
 function addon:HandleAuraUpdate(unitToken, updateInfo)
     local raidIndex = UnitInRaid(unitToken)
     if not raidIndex then return end
+    -- I suspect this method of getting raidId is causing taint but I'm ignoring it.
     local unit = "raid" .. raidIndex
     local changed = false
 
-    -- full resync (rare but important)
     if updateInfo.isFullUpdate then
         local instanceId = addon:HasDispellableAura(unit)
         if instanceId and not instanceIdToDispel[instanceId] then
@@ -61,7 +61,6 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
         end
     end
 
-    -- 1. added auras (already have full data)
     if updateInfo.addedAuras then
         for _, aura in ipairs(updateInfo.addedAuras) do
             local instanceId = addon:IsPlusHasDispellableAura(aura, unit)
@@ -80,7 +79,8 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
         end
     end
 
-    -- 3. removals → re-check this unit only
+    -- not handling updatedAuras
+
     if updateInfo.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
             if auraInstanceID ~= nil then
