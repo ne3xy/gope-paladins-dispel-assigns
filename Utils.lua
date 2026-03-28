@@ -1,6 +1,6 @@
 local addonName, addon = ...
 
-function addon:IsDispellableAura(aura, unit)
+function addon:IsPlusHasDispellableAura(aura, unit)
     if aura and aura.dispelName then
         return addon:HasDispellableAura(unit)
     end
@@ -13,9 +13,14 @@ function addon:HasDispellableAura(unit)
 
     for _, aura in ipairs(auras) do
         if aura.dispelName then
-            return aura.auraInstanceID
+            print("Found " .. unit .. " IID: " .. aura.auraInstanceID .. " - " .. (aura.name or "unknown"))
+            return addon:InstanceIdForUnit(unit, aura.auraInstanceID)
         end
     end
 
     return nil
+end
+
+function addon:InstanceIdForUnit(unit, instanceId)
+    return unit .. "-" .. instanceId
 end

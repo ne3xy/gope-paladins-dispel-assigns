@@ -50,6 +50,7 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
     if updateInfo.isFullUpdate then
         local instanceId = addon:HasDispellableAura(unit)
         if instanceId and not instanceIdToDispel[instanceId] then
+            print("Adding dispel by full update for unit " .. unit .. " with instance ID " .. instanceId)
             table.insert(addon.dispels, {
                 unit = unit,
                 auraInstanceID = instanceId,
@@ -63,14 +64,16 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
     -- 1. added auras (already have full data)
     if updateInfo.addedAuras then
         for _, aura in ipairs(updateInfo.addedAuras) do
-            if addon:IsDispellableAura(aura, unit) then
-                if not instanceIdToDispel[aura.auraInstanceID] then
+            local instanceId = addon:IsPlusHasDispellableAura(aura, unit)
+            if instanceId then
+                if not instanceIdToDispel[instanceId] then
+                    print("Adding dispel by added aura for unit " .. unit .. " with instance ID " .. instanceId)
                     table.insert(addon.dispels, {
                         unit = unit,
-                        auraInstanceID = aura.auraInstanceID,
+                        auraInstanceID = instanceId,
                         dispelled = false
                     })
-                    instanceIdToDispel[aura.auraInstanceID] = #addon.dispels
+                    instanceIdToDispel[instanceId] = #addon.dispels
                 end
                 changed = true
             end
@@ -81,10 +84,12 @@ function addon:HandleAuraUpdate(unitToken, updateInfo)
     if updateInfo.removedAuraInstanceIDs then
         for _, auraInstanceID in ipairs(updateInfo.removedAuraInstanceIDs) do
             if auraInstanceID ~= nil then
-                local dispelIndex = instanceIdToDispel[auraInstanceID]
+                local instanceId = addon:InstanceIdForUnit(unit, auraInstanceID)
+                local dispelIndex = instanceIdToDispel[instanceId]
                 if dispelIndex and addon.dispels[dispelIndex] then
+                    print("Marking dispel as dispelled for unit " .. unit .. " with instance ID " .. instanceId)
                     addon.dispels[dispelIndex].dispelled = true
-                    instanceIdToDispel[auraInstanceID] = nil
+                    instanceIdToDispel[instanceId] = nil
                     changed = true
                 end
             end
